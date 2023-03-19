@@ -173,7 +173,7 @@ const EngineerRepairsDatagrid = () => {
       },
       {
         field: 'actions',
-        headerName: 'Actions',
+        headerName: 'حفظ',
         type: 'actions',
         renderCell: (params) => (
           <EngineerActions {...{ params, rowId, setRowId }} />

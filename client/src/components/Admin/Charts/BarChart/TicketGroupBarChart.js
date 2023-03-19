@@ -38,7 +38,7 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
   }, []);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return <LoadingSpinner size={isDashboard ? '4rem' : undefined} />;
   }
 
   return (

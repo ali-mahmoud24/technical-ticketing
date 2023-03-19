@@ -9,7 +9,7 @@ import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 import Header from '../../Layout/Header';
 
 import RepairsSummary from './RepairsSummary';
-import BarChart from '../Charts/BarChart/TicketGroupBarChart';
+import TicketGroupBarChart from '../Charts/BarChart/TicketGroupBarChart';
 import TicketRepairTypeChart from '../Charts/PieChart/TicketRepairTypeChart';
 
 import { useReactToPrint } from 'react-to-print';
@@ -104,10 +104,9 @@ const Dashboard = () => {
             الأعطال
           </Typography>
           <Box
-            height="350px"
-            // mt="-20px"
+            height="370px"
           >
-            <BarChart isDashboard={true} />
+            <TicketGroupBarChart isDashboard={true} />
           </Box>
         </Box>
       </Box>

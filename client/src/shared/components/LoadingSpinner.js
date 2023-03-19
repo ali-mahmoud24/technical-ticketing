@@ -1,6 +1,6 @@
 import { Box, CircularProgress } from '@mui/material';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({ size = '7rem' }) => {
   return (
     <Box
       sx={{
@@ -10,7 +10,7 @@ const LoadingSpinner = () => {
         height: '90vh',
       }}
     >
-      <CircularProgress size="7rem" sx={{ color: '#fff' }} />
+      <CircularProgress size={size} sx={{ color: '#fff' }} />
     </Box>
   );
 };
