@@ -5,6 +5,7 @@ const { HttpError } = require('../models/http-error');
 
 const Ticket = require('../models/ticket');
 const User = require('../models/user');
+const { formatDateAndTime } = require('../utils/date');
 
 exports.addUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -166,7 +167,8 @@ exports.deleteUser = async (req, res, next) => {
 exports.getTickets = async (req, res, next) => {
   let loadedTickets;
   try {
-    loadedTickets = await Ticket.find({}).sort({ _id: -1 })
+    loadedTickets = await Ticket.find({})
+      .sort({ _id: -1 })
       .populate('engineerId')
       .populate('userId');
   } catch (err) {
@@ -181,42 +183,23 @@ exports.getTickets = async (req, res, next) => {
     return next(new HttpError('Could not find tickets.', 404));
   }
 
-  const dateOptions = {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  };
-
-  const timeOptions = {
-    hour: '2-digit',
-    minute: '2-digit',
-  };
-
   res.status(200).json({
     tickets: loadedTickets.map((ticket) => {
       const ticketSeralized = ticket.toObject({ getters: true });
-      const ticketStartDate = ticketSeralized.startTime.toLocaleDateString(
-        'ar-EG',
-        dateOptions
-      );
-      const ticketStartTime = ticketSeralized.startTime.toLocaleTimeString(
-        'ar-EG',
-        timeOptions
+      const { formattedDate, formattedTime } = formatDateAndTime(
+        ticketSeralized.startTime
       );
 
       let ticketEndDate;
       let ticketEndTime;
 
-      if (ticket.closeTime) {
-        ticketEndDate = ticketSeralized.closeTime.toLocaleDateString(
-          'ar-EG',
-          dateOptions
+      if (ticketSeralized.closeTime) {
+        const { formattedDate, formattedTime } = formatDateAndTime(
+          ticketSeralized.closeTime
         );
-        ticketEndTime = ticketSeralized.closeTime.toLocaleTimeString(
-          'ar-EG',
-          timeOptions
-        );
+
+        ticketEndDate = formattedDate;
+        ticketEndTime = formattedTime;
       }
 
       const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
@@ -226,8 +209,8 @@ exports.getTickets = async (req, res, next) => {
         ...ticketSeralized,
         engineerName,
         userFullName,
-        startDate: ticketStartDate,
-        startTime: ticketStartTime,
+        startDate: formattedDate,
+        startTime: formattedTime,
         closeDate: ticketEndDate ? ticketEndDate : ticket.closeTime,
         closeTime: ticketEndTime ? ticketEndTime : ticket.closeTime,
       };

@@ -37,10 +37,7 @@ exports.login = async (req, res, next) => {
   try {
     token = jwt.sign(
       { userId: loadedUser.id, userName: loadedUser.userName },
-      'supersecret_dont_share',
-      {
-        expiresIn: '1h',
-      }
+      'supersecret_dont_share'
     );
   } catch (err) {
     const error = new HttpError(
