@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { USERS_TYPE_LIST } from '../../shared/utils/selectLists';
 
 import { useEffect, useState } from 'react';
 
@@ -15,12 +16,13 @@ import {
 } from '@mui/x-data-grid';
 import AdminPanelSettingsOutlinedIcon from '@mui/icons-material/AdminPanelSettingsOutlined';
 import LockOpenOutlinedIcon from '@mui/icons-material/LockOpenOutlined';
-import { EngineeringOutlined } from '@mui/icons-material';
+import EngineeringOutlined from '@mui/icons-material/EngineeringOutlined';
 
-import { tokens } from '../../theme';
-
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 import Header from '../Layout/Header';
 import UserActions from './UserActions';
+
+import { tokens } from '../../theme';
 
 const UsersDatagrid = () => {
   const theme = useTheme();
@@ -69,8 +71,8 @@ const UsersDatagrid = () => {
       headerName: 'اسم المستخدم',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
       cellClassName: 'name-column--cell',
+      flex: 1,
     },
     {
       field: 'userName',
@@ -84,7 +86,6 @@ const UsersDatagrid = () => {
       headerName: 'كود المشغل',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
     },
     {
       field: 'specialization',
@@ -92,6 +93,9 @@ const UsersDatagrid = () => {
       headerAlign: 'center',
       align: 'center',
       flex: 1,
+      type: 'singleSelect',
+      valueOptions: USERS_TYPE_LIST,
+      sortable: false,
       renderCell: ({ row: { specialization } }) => specialization || '---',
     },
     {
@@ -99,7 +103,10 @@ const UsersDatagrid = () => {
       headerName: 'نوع المستخدم',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
+      width: 230,
+      type: 'singleSelect',
+      valueOptions: ['Admin', 'Engineer', 'User'],
+      sortable: false,
       renderCell: ({ row: { access } }) => {
         return (
           <Box
@@ -136,57 +143,10 @@ const UsersDatagrid = () => {
         <UserActions onDelete={deleteUserHandler} userId={id} />
       ),
     },
-    // {
-    //   field: 'userId',
-    //   headerName: 'تحديث البيانات',
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   flex: 1,
-    //   renderCell: ({ row: { userId } }) => {
-    //     return (
-    //       <Box
-    //         width="60%"
-    //         m="0 auto"
-    //         p="5px"
-    //         display="flex"
-    //         justifyContent="center"
-    //         backgroundColor={
-    //           colors.greenAccent[600]
-    //           //  colors.greenAccent[700]
-    //           //   : colors.greenAccent[700]
-    //         }
-    //         borderRadius="4px"
-    //       >
-    //         <EditIcon />
-    //         <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
-    //           <Link to={`/users/${userId}`}>تحديث البيانات</Link>
-    //         </Typography>
-    //       </Box>
-    //     );
-    //   },
-    // },
-    // {
-    //   field: 'deletedUserId',
-    //   headerName: 'الغاء',
-    //   headerAlign: 'center',
-    //   align: 'center',
-    //   flex: 1,
-    //   renderCell: ({ row: { deletedUserId } }) => {
-    //     return (
-    //       <IconButton
-    //       loadin
-    //         aria-label="delete"
-    //         onClick={() => deleteUserHandler(deletedUserId)}
-    //       >
-    //         <DeleteIcon />
-    //       </IconButton>
-    //     );
-    //   },
-    // },
   ];
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -228,7 +188,6 @@ const UsersDatagrid = () => {
         }}
       >
         <DataGrid
-          // checkboxSelection
           columns={columns}
           rows={usersData}
           loading={isLoading}
@@ -247,11 +206,9 @@ function CustomToolbar() {
     <GridToolbarContainer>
       <GridToolbarColumnsButton />
       <GridToolbarFilterButton />
-      {/* <GridToolbarDensitySelector /> */}
       <GridToolbarExport
         csvOptions={{
           fileName: 'تقرير الموظفين',
-          // delimiter: ';',
           utf8WithBom: true,
         }}
       />

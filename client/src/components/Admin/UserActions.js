@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Box, IconButton, Tooltip } from '@mui/material';
 import { Delete, Edit } from '@mui/icons-material';
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 
 const UserActions = ({ userId, onDelete }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,7 @@ const UserActions = ({ userId, onDelete }) => {
   };
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (

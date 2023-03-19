@@ -7,19 +7,20 @@ import { Box, IconButton, Typography, useTheme } from '@mui/material';
 import { ProSidebar, Menu, MenuItem } from 'react-pro-sidebar';
 import 'react-pro-sidebar/dist/css/styles.css';
 
-import { tokens } from '../../theme';
-
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import PeopleOutlinedIcon from '@mui/icons-material/PeopleOutlined';
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
-import BookOnlineIcon from '@mui/icons-material/BookOnline';
-import { AuthContext } from '../../shared/context/auth-context';
+import BookOnlineOutlinedIcon from '@mui/icons-material/BookOnlineOutlined';
 
 import PieChartOutlineOutlinedIcon from '@mui/icons-material/PieChartOutlineOutlined';
-// import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
-// import TimelineOutlinedIcon from '@mui/icons-material/TimelineOutlined';
+import BarChartOutlinedIcon from '@mui/icons-material/BarChartOutlined';
+
+import { tokens } from '../../theme';
+
+import { AuthContext } from '../../shared/context/auth-context';
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
@@ -43,7 +44,7 @@ const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [selected, setSelected] = useState();
+  const [selected, setSelected] = useState('Dashboard');
 
   const { isAdmin, isEngineer } = useContext(AuthContext);
 
@@ -116,6 +117,14 @@ const Sidebar = () => {
 
           {isAdmin && (
             <Box paddingLeft={isCollapsed ? undefined : '10%'}>
+              <Item
+                title="Dashboard"
+                to="/dashboard"
+                icon={<HomeOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
+
               <Typography
                 variant="h6"
                 color={colors.grey[300]}
@@ -167,6 +176,14 @@ const Sidebar = () => {
                 selected={selected}
                 setSelected={setSelected}
               />
+
+              <Item
+                title="Bar Chart"
+                to="/bar-chart"
+                icon={<BarChartOutlinedIcon />}
+                selected={selected}
+                setSelected={setSelected}
+              />
             </Box>
           )}
 
@@ -197,7 +214,7 @@ const Sidebar = () => {
               <Item
                 title="طلب اصلاح"
                 to="/ticket-form"
-                icon={<BookOnlineIcon />}
+                icon={<BookOnlineOutlinedIcon />}
                 selected={selected}
                 setSelected={setSelected}
               />

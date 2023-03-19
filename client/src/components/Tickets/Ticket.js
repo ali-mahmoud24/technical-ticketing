@@ -52,7 +52,7 @@ const TicketItem = () => {
         ref={componentRef}
         variant="filled"
         sx={{
-          width: isNonMobile ? '40vw' : '70vw',
+          width: isNonMobile ? '60vw' : '70vw',
           margin: '0 auto',
           borderRadius: '20px',
           border: '2px solid black',
@@ -86,7 +86,7 @@ const TicketItem = () => {
           >
             <article>
               <Typography variant="h3" marginBottom={'20px'}>
-                الادارة:
+              الإدارة:
               </Typography>
               <Typography variant="h5">{administration}</Typography>
             </article>

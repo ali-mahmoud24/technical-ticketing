@@ -9,6 +9,7 @@
     "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.11.12",
     "@mui/x-data-grid": "^6.0.1",
+    "@nivo/bar": "^0.80.0",
     "@nivo/pie": "^0.80.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",

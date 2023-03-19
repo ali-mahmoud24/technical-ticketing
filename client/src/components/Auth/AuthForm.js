@@ -57,7 +57,7 @@ const AddUserForm = () => {
         );
 
         if (loginData.isAdmin) {
-          navigate('/repairs', { replace: true });
+          navigate('/dashboard', { replace: true });
         } else if (loginData.isEngineer) {
           navigate('/my-repairs', { replace: true });
         } else {

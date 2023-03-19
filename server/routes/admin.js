@@ -24,7 +24,18 @@ router.get('/tickets', adminController.getTickets);
 
 router.get('/tickets/pie/repairType', adminController.getRepairTypeValues);
 
-router.get('/tickets/pie/adminstration', adminController.getAdministrationValues);
+router.get(
+  '/tickets/pie/adminstration',
+  adminController.getAdministrationValues
+);
+
+router.get('/tickets/bar', adminController.bar);
+
+router.get('/tickets/number', adminController.getNumberTickets);
+
+router.get('/tickets/completed', adminController.getCompletedTickets);
+
+router.get('/tickets/uncompleted', adminController.getUncompletedTickets);
 
 // router.get('/engineers', adminController.getEngineers);
 

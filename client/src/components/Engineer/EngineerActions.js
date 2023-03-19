@@ -12,15 +12,16 @@ const EngineerActions = ({ params, rowId, setRowId }) => {
 
   const changeTicketStatusHandler = async () => {
     const status = params.row.status;
+    const note = params.row.note;
     const ticketId = params.row.id;
 
     let closeTime;
     let updatedTicketData;
     if (status === 'Completed') {
       closeTime = new Date();
-      updatedTicketData = { status, closeTime };
+      updatedTicketData = { status, closeTime, note };
     } else {
-      updatedTicketData = { status };
+      updatedTicketData = { status, note };
     }
 
     try {

@@ -69,7 +69,7 @@ exports.addUser = async (req, res, next) => {
 exports.getUsers = async (req, res, next) => {
   let loadedUsers;
   try {
-    loadedUsers = await User.find({});
+    loadedUsers = await User.find({}).sort({ _id: -1 });
   } catch (err) {
     const error = new HttpError(
       'Fetching Users failed, please try again later.',
@@ -166,7 +166,7 @@ exports.deleteUser = async (req, res, next) => {
 exports.getTickets = async (req, res, next) => {
   let loadedTickets;
   try {
-    loadedTickets = await Ticket.find({})
+    loadedTickets = await Ticket.find({}).sort({ _id: -1 })
       .populate('engineerId')
       .populate('userId');
   } catch (err) {
@@ -307,6 +307,92 @@ exports.getAdministrationValues = async (req, res, next) => {
   }
 
   res.status(200).json({ pieData });
+};
+
+exports.bar = async (req, res, next) => {
+  let loadedTickets;
+  try {
+    loadedTickets = await Ticket.find({}).select('administration repairType');
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching tickets failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  if (!loadedTickets || loadedTickets.length === 0) {
+    return next(new HttpError('Could not find tickets.', 404));
+  }
+
+  const lookUp = {};
+
+  loadedTickets.forEach((ticket) => {
+    lookUp[ticket.repairType] = lookUp[ticket.repairType] || {};
+
+    if (lookUp[ticket.repairType][ticket.administration]) {
+      lookUp[ticket.repairType][ticket.administration] += 1;
+    } else {
+      lookUp[ticket.repairType][ticket.administration] = 1;
+    }
+  });
+
+  const barData = [];
+  for (const [key, value] of Object.entries(lookUp)) {
+    const obj = {
+      repairType: key,
+      ...value,
+    };
+
+    barData.push(obj);
+  }
+
+  res.status(200).json({ barData });
+};
+
+exports.getNumberTickets = async (req, res, next) => {
+  let numberOfTickets;
+  try {
+    numberOfTickets = await Ticket.countDocuments();
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching number of tickets failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ number: numberOfTickets });
+};
+
+exports.getCompletedTickets = async (req, res, next) => {
+  let numberOfTickets;
+  try {
+    numberOfTickets = await Ticket.countDocuments({ status: 'Completed' });
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching number of tickets failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ number: numberOfTickets });
+};
+
+exports.getUncompletedTickets = async (req, res, next) => {
+  let numberOfTickets;
+  try {
+    numberOfTickets = await Ticket.countDocuments({ status: 'Uncompleted' });
+  } catch (err) {
+    const error = new HttpError(
+      'Fetching number of tickets failed, please try again later.',
+      500
+    );
+    return next(error);
+  }
+
+  res.status(200).json({ number: numberOfTickets });
 };
 
 // exports.deleteAppointment = async (req, res, next) => {

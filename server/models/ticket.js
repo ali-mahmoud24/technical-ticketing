@@ -19,14 +19,16 @@ const ticketSchema = new Schema({
     type: Date,
     required: true,
   },
-  closeTime: {
-    type: Date,
-    // required: true,
-  },
   status: {
     type: String,
-    // required: true,
     default: 'Uncompleted',
+  },
+  closeTime: {
+    type: Date,
+  },
+  note: {
+    type: String,
+    default: 'لا يوجد ملاحظة',
   },
   engineerId: {
     type: Schema.Types.ObjectId,

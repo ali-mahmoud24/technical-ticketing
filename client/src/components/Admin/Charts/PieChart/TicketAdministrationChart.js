@@ -7,6 +7,7 @@ import { useTheme } from '@mui/material';
 import { ResponsivePie } from '@nivo/pie';
 
 import { tokens } from '../../../../theme';
+import LoadingSpinner from '../../../../shared/components/LoadingSpinner';
 
 const TicketAdministrationChart = () => {
   const theme = useTheme();
@@ -36,7 +37,7 @@ const TicketAdministrationChart = () => {
   }, []);
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (

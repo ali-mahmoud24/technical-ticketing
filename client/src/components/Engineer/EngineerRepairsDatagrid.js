@@ -21,6 +21,8 @@ import Header from '../../components/Layout/Header';
 import EngineerActions from './EngineerActions';
 
 import { AuthContext } from '../../shared/context/auth-context';
+import { REPAIR_TYPE_LIST } from '../../shared/utils/selectLists';
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 
 const EngineerRepairsDatagrid = () => {
   const theme = useTheme();
@@ -70,6 +72,7 @@ const EngineerRepairsDatagrid = () => {
       ticket.closeTime && ticket.status === 'Completed'
         ? ticket.closeTime
         : '---',
+    note: ticket.note || 'لا يوجد ملاحظة',
   }));
 
   const columns = useMemo(
@@ -79,7 +82,6 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'اسم المهندس',
         headerAlign: 'center',
         align: 'center',
-        flex: 1,
         cellClassName: 'name-column--cell',
       },
       {
@@ -87,14 +89,15 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'اسم المشغل',
         headerAlign: 'center',
         align: 'center',
-        flex: 1,
       },
       {
         field: 'repairType',
         headerName: 'نوع العطل',
         headerAlign: 'center',
         align: 'center',
-        flex: 1,
+        type: 'singleSelect',
+        valueOptions: REPAIR_TYPE_LIST,
+        sortable: false,
       },
       {
         field: 'startDate',
@@ -102,13 +105,14 @@ const EngineerRepairsDatagrid = () => {
         headerAlign: 'center',
         align: 'center',
         flex: 1,
+        // type: 'date',
+        // valueGetter: ({ value }) => value && new Date(value),
       },
       {
         field: 'startTime',
         headerName: 'وقت البدأ',
         headerAlign: 'center',
         align: 'center',
-        flex: 1,
       },
       {
         field: 'closeDate',
@@ -122,7 +126,15 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'وقت النهاية',
         headerAlign: 'center',
         align: 'center',
+      },
+      {
+        field: 'note',
+        headerName: 'ملاحظة المهندس',
+        headerAlign: 'center',
+        align: 'center',
         flex: 1,
+        editable: true,
+        sortable: false,
       },
 
       {
@@ -134,7 +146,7 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'الحالة',
         headerAlign: 'center',
         align: 'center',
-        flex: 1,
+        width: 170,
         renderCell: ({ row: { status } }) => {
           return (
             <Box
@@ -172,7 +184,7 @@ const EngineerRepairsDatagrid = () => {
   );
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -219,9 +231,6 @@ const EngineerRepairsDatagrid = () => {
               overflow: 'hidden',
             },
           }}
-          HorizontalAlignment="Stretch"
-          HorizontalContentAlignment="Stretch"
-          ColumnWidth="*"
           onCellEditStop={(params) => setRowId(params.id)}
           columns={columns}
           rows={ticketsData}

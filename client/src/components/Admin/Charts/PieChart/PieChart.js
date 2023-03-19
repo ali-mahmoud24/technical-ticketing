@@ -36,7 +36,7 @@ const PieChart = () => {
 
       <Box height="65vh">
         {chartType === 'أنواع الأعطال' && <TicketRepairTypeChart />}
-        {chartType === 'الادارات' && <TicketAdministrationChart />}
+        {chartType === 'الإدارات' && <TicketAdministrationChart />}
       </Box>
     </Box>
   );

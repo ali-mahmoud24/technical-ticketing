@@ -28,6 +28,7 @@ import * as yup from 'yup';
 
 import { tokens } from '../../theme';
 import { AuthContext } from '../../shared/context/auth-context';
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 
 const TicketForm = () => {
   const navigate = useNavigate();
@@ -107,7 +108,7 @@ const TicketForm = () => {
   };
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (
@@ -149,7 +150,7 @@ const TicketForm = () => {
             </Box>
 
             <FormControl fullWidth variant="filled">
-              <InputLabel id="administration">الادارة</InputLabel>
+              <InputLabel id="administration">الإدارة</InputLabel>
               <Select
                 id="administration"
                 labelId="administration"
@@ -253,7 +254,7 @@ const TicketForm = () => {
 export default TicketForm;
 
 const ticketSchema = yup.object().shape({
-  administration: yup.string().required('من فضلك أدخل الادارة'),
+  administration: yup.string().required('من فضلك أدخل الإدارة'),
   sector: yup.string(),
   repairType: yup.string().required('من فضلك حدد نوع العطل'),
   engineerId: yup.string().required('من فضلك اختار المهندس'),

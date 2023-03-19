@@ -12,6 +12,7 @@ import { Formik } from 'formik';
 import * as yup from 'yup';
 
 import Header from '../../components/Layout/Header';
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 
 const UpdateUserForm = () => {
   const [loadedUser, setLoadedUser] = useState();
@@ -74,7 +75,7 @@ const UpdateUserForm = () => {
   };
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   return (

@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+import { REPAIR_TYPE_LIST } from '../../shared/utils/selectLists';
+
 import { useEffect, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
@@ -15,9 +17,10 @@ import {
 import { GridToolbarContainer, GridToolbarExport } from '@mui/x-data-grid';
 import { arSD } from '@mui/x-data-grid';
 
-import { tokens } from '../../theme';
-
 import Header from '../Layout/Header';
+
+import { tokens } from '../../theme';
+import LoadingSpinner from '../../shared/components/LoadingSpinner';
 
 const AdminRepairsDatagrid = () => {
   const theme = useTheme();
@@ -47,7 +50,7 @@ const AdminRepairsDatagrid = () => {
   }, []);
 
   if (isLoading) {
-    return;
+    return <LoadingSpinner />;
   }
 
   const ticketsData = loadedTickets.map((ticket) => ({
@@ -66,11 +69,10 @@ const AdminRepairsDatagrid = () => {
       ticket.closeTime && ticket.status === 'Completed'
         ? ticket.closeTime
         : '---',
+    note: ticket.note || 'لا يوجد ملاحظة',
   }));
 
   const columns = [
-    // { field: "id", headerName: "ID", flex: 0.5 },
-    // { field: "registrarId", headerName: "Registrar ID" },
     {
       field: 'engineerName',
       headerName: 'اسم المهندس',
@@ -91,7 +93,9 @@ const AdminRepairsDatagrid = () => {
       headerName: 'نوع العطل',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
+      type: 'singleSelect',
+      valueOptions: REPAIR_TYPE_LIST,
+      sortable: false,
     },
     {
       field: 'startDate',
@@ -105,7 +109,6 @@ const AdminRepairsDatagrid = () => {
       headerName: 'وقت البدأ',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
     },
     {
       field: 'closeDate',
@@ -119,16 +122,25 @@ const AdminRepairsDatagrid = () => {
       headerName: 'وقت النهاية',
       headerAlign: 'center',
       align: 'center',
+    },
+    {
+      field: 'note',
+      headerName: 'ملاحظة المهندس',
+      headerAlign: 'center',
+      align: 'center',
       flex: 1,
+      sortable: false,
     },
 
     {
       field: 'status',
-      sortable: false,
       headerName: 'الحالة',
       headerAlign: 'center',
       align: 'center',
-      flex: 1,
+      type: 'singleSelect',
+      valueOptions: ['Uncompleted', 'Accepted', 'Completed'],
+      sortable: false,
+      width: 170,
       renderCell: ({ row: { status } }) => {
         return (
           <Box
@@ -141,12 +153,11 @@ const AdminRepairsDatagrid = () => {
             backgroundColor={
               status === 'Uncompleted'
                 ? colors.redAccent[400]
+                : status === 'Accepted'
+                ? colors.grey[500]
                 : colors.greenAccent[700]
             }
           >
-            {/* {access === "admin" && <AdminPanelSettingsOutlinedIcon />}
-            {access === "manager" && <SecurityOutlinedIcon />}
-            {access === "user" && <LockOpenOutlinedIcon />} */}
             <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
               {status}
             </Typography>

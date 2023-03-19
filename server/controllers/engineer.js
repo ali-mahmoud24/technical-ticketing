@@ -13,7 +13,8 @@ exports.getTickets = async (req, res, next) => {
   try {
     loadedTickets = await Ticket.find({ engineerId: engineerId })
       .populate('engineerId')
-      .populate('userId');
+      .populate('userId')
+      .sort({ _id: -1 });
   } catch (err) {
     const error = new HttpError(
       'Fetching tickets failed, please try again later.',
@@ -82,11 +83,11 @@ exports.getTickets = async (req, res, next) => {
 };
 
 exports.updateTicketStatus = async (req, res, next) => {
-  const { status, closeTime } = req.body;
+  const { status, closeTime, note } = req.body;
   const { ticketId } = req.params;
 
   try {
-    await Ticket.findByIdAndUpdate(ticketId, { status, closeTime });
+    await Ticket.findByIdAndUpdate(ticketId, { status, closeTime, note });
   } catch (err) {
     const error = new HttpError(
       'Updating ticket failed, please try again later.',
@@ -98,40 +99,4 @@ exports.updateTicketStatus = async (req, res, next) => {
   res.status(200).json({
     message: 'Ticket information updated successfully.',
   });
-
-  //   let loadedTicket;
-  //   try {
-  //     loadedTicket = await Ticket.findById(ticketId);
-  //   } catch (err) {
-  //     const error = new HttpError(
-  //       'Finding ticket failed, please try again later.',
-  //       500
-  //     );
-  //     return next(error);
-  //   }
-
-  //   if (!loadedTicket) {
-  //     const error = new HttpError('No Such ticket found.', 404);
-  //     return next(error);
-  //   }
-  //   console.log(loadedTicket);
-
-  //   loadedTicket.status = status;
-
-  //   console.log(loadedTicket);
-
-  //   try {
-  //     await loadedTicket.save();
-  //   } catch (err) {
-  //     const error = new HttpError(
-  //       'Updating the ticket failed, please try again later.',
-  //       500
-  //     );
-  //     return next(error);
-  //   }
-
-  //   res.status(200).json({
-  //     message: 'Ticket information updated successfully.',
-  //     ticketId: loadedTicket._id,
-  //   });
 };
