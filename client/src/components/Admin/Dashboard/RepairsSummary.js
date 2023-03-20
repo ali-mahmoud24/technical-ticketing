@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { useState, useEffect } from 'react';
 
-import { Box, CircularProgress, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 

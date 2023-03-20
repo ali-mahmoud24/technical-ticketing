@@ -15,3 +15,24 @@ export const formatDateAndTime = (time) => {
 
   return { formattedDate, formattedTime };
 };
+
+export const formatDate = (date) => {
+  var validDate = Date.parse(date);
+
+  if (!validDate) {
+    return;
+  }
+
+  const formattedDate = date.toLocaleDateString('ar-EG', dateOptions);
+  return formattedDate;
+};
+
+export const formatTime = (time) => {
+  var validTime = Date.parse(time);
+
+  if (!validTime) {
+    return;
+  }
+  const formattedDate = time.toLocaleTimeString('ar-EG', timeOptions);
+  return formattedDate;
+};

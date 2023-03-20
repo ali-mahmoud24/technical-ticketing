@@ -19,8 +19,15 @@ const TicketItem = () => {
   const isNonMobile = useMediaQuery('(min-width:992px)');
 
   const { state } = useLocation();
-  const { engineerName, administration, sector, repairType, date, time } =
-    state;
+  const {
+    ticketId,
+    engineerFullName,
+    administration,
+    sector,
+    repairType,
+    date,
+    time,
+  } = state;
 
   const pageStyle = `
   @media print {
@@ -43,7 +50,6 @@ const TicketItem = () => {
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     documentTitle: 'طلب تصليح',
-    // onAfterPrint: () => alert('تمت الطباعة بنجاح'),
   });
 
   return (
@@ -62,9 +68,24 @@ const TicketItem = () => {
       >
         <style>{pageStyle}</style>
         <CardContent>
-          <Typography variant="h3" margin={'20px 0'}>
-            المهندس : {engineerName}
-          </Typography>
+          <Box
+            component={'article'}
+            sx={{
+              width: '80%',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <Typography variant="h3" margin={'20px 0'}>
+              المهندس : {engineerFullName}
+            </Typography>
+
+            <Typography variant="h3" margin={'20px 0'}>
+              # التسلسل : {ticketId}
+            </Typography>
+          </Box>
 
           <article>
             <Typography variant="h3">نوع العطل:</Typography>
@@ -86,7 +107,7 @@ const TicketItem = () => {
           >
             <article>
               <Typography variant="h3" marginBottom={'20px'}>
-              الإدارة:
+                الإدارة:
               </Typography>
               <Typography variant="h5">{administration}</Typography>
             </article>

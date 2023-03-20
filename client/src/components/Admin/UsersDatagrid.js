@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { USERS_TYPE_LIST } from '../../shared/utils/selectLists';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import {
@@ -31,11 +31,13 @@ const UsersDatagrid = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadedUsers, setLoadedUsers] = useState([]);
 
-  const deleteUserHandler = async (deletedUserId) => {
-    setLoadedUsers((prevUsers) =>
-      prevUsers.filter((user) => user.id !== deletedUserId)
-    );
-  };
+  const deleteUserHandler = useCallback(
+    async (deletedUserId) =>
+      setLoadedUsers((prevUsers) =>
+        prevUsers.filter((user) => user.id !== deletedUserId)
+      ),
+    []
+  );
 
   useEffect(() => {
     const getAllUsers = async () => {
@@ -65,85 +67,88 @@ const UsersDatagrid = () => {
     access: user.isAdmin ? 'Admin' : user.isEngineer ? 'Engineer' : 'User',
   }));
 
-  const columns = [
-    {
-      field: 'fullName',
-      headerName: 'اسم المستخدم',
-      headerAlign: 'center',
-      align: 'center',
-      cellClassName: 'name-column--cell',
-      flex: 1,
-    },
-    {
-      field: 'userName',
-      headerName: 'اسم المشغل',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-    },
-    {
-      field: 'userCode',
-      headerName: 'كود المشغل',
-      headerAlign: 'center',
-      align: 'center',
-    },
-    {
-      field: 'specialization',
-      headerName: 'التخصص',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      type: 'singleSelect',
-      valueOptions: USERS_TYPE_LIST,
-      sortable: false,
-      renderCell: ({ row: { specialization } }) => specialization || '---',
-    },
-    {
-      field: 'access',
-      headerName: 'نوع المستخدم',
-      headerAlign: 'center',
-      align: 'center',
-      width: 230,
-      type: 'singleSelect',
-      valueOptions: ['Admin', 'Engineer', 'User'],
-      sortable: false,
-      renderCell: ({ row: { access } }) => {
-        return (
-          <Box
-            width="60%"
-            m="0 auto"
-            p="5px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              access === 'Admin'
-                ? colors.greenAccent[600]
-                : access === 'engineer'
-                ? colors.greenAccent[700]
-                : colors.greenAccent[700]
-            }
-            borderRadius="4px"
-          >
-            {access === 'Admin' && <AdminPanelSettingsOutlinedIcon />}
-            {access === 'Engineer' && <EngineeringOutlined />}
-            {access === 'User' && <LockOpenOutlinedIcon />}
-            <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
-              {access}
-            </Typography>
-          </Box>
-        );
+  const columns = useMemo(
+    () => [
+      {
+        field: 'fullName',
+        headerName: 'اسم المستخدم',
+        headerAlign: 'center',
+        align: 'center',
+        cellClassName: 'name-column--cell',
+        flex: 1,
       },
-    },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      type: 'actions',
-      width: 150,
-      renderCell: ({ row: { id } }) => (
-        <UserActions onDelete={deleteUserHandler} userId={id} />
-      ),
-    },
-  ];
+      {
+        field: 'userName',
+        headerName: 'اسم المشغل',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+      },
+      {
+        field: 'userCode',
+        headerName: 'كود المشغل',
+        headerAlign: 'center',
+        align: 'center',
+      },
+      {
+        field: 'specialization',
+        headerName: 'التخصص',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        type: 'singleSelect',
+        valueOptions: USERS_TYPE_LIST,
+        sortable: false,
+        renderCell: ({ row: { specialization } }) => specialization || '---',
+      },
+      {
+        field: 'access',
+        headerName: 'نوع المستخدم',
+        headerAlign: 'center',
+        align: 'center',
+        width: 230,
+        type: 'singleSelect',
+        valueOptions: ['Admin', 'Engineer', 'User'],
+        sortable: false,
+        renderCell: ({ row: { access } }) => {
+          return (
+            <Box
+              width="60%"
+              m="0 auto"
+              p="5px"
+              display="flex"
+              justifyContent="center"
+              backgroundColor={
+                access === 'Admin'
+                  ? colors.greenAccent[600]
+                  : access === 'Engineer'
+                  ? colors.greenAccent[800]
+                  : colors.grey[500]
+              }
+              borderRadius="4px"
+            >
+              {access === 'Admin' && <AdminPanelSettingsOutlinedIcon />}
+              {access === 'Engineer' && <EngineeringOutlined />}
+              {access === 'User' && <LockOpenOutlinedIcon />}
+              <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
+                {access}
+              </Typography>
+            </Box>
+          );
+        },
+      },
+      {
+        field: 'actions',
+        // headerName: 'Actions',
+        type: 'actions',
+        width: 200,
+        renderCell: ({ row: { id } }) => (
+          <UserActions onDelete={deleteUserHandler} userId={id} />
+        ),
+      },
+    ],
+    [deleteUserHandler, colors]
+  );
 
   if (isLoading) {
     return <LoadingSpinner />;

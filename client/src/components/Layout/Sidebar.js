@@ -1,6 +1,6 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 
-import { Link } from 'react-router-dom';
+import { NavLink, useMatch, useResolvedPath } from 'react-router-dom';
 
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
 
@@ -25,6 +25,16 @@ import { AuthContext } from '../../shared/context/auth-context';
 const Item = ({ title, to, icon, selected, setSelected }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  let resolved = useResolvedPath(to);
+  let match = useMatch({ path: resolved.pathname, end: true });
+
+  useEffect(() => {
+    if (match) {
+      setSelected(title);
+    }
+  }, [match, setSelected, title]);
+
   return (
     <MenuItem
       active={selected === title}
@@ -35,7 +45,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       icon={icon}
     >
       <Typography>{title}</Typography>
-      <Link to={to} />
+      <NavLink to={to} />
     </MenuItem>
   );
 };
@@ -43,7 +53,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
 const Sidebar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(true);
   const [selected, setSelected] = useState('Dashboard');
 
   const { isAdmin, isEngineer } = useContext(AuthContext);
@@ -96,24 +106,6 @@ const Sidebar = () => {
               </Box>
             )}
           </MenuItem>
-
-          {/* {!isCollapsed && (
-            <Box mb="25px">
-              <Box textAlign="center">
-                <Typography
-                  variant="h2"
-                  color={colors.grey[100]}
-                  fontWeight="bold"
-                  sx={{ m: '10px 0 0 0' }}
-                >
-                  Ed Roh
-                </Typography>
-                <Typography variant="h5" color={colors.greenAccent[500]}>
-                  VP Fancy Admin
-                </Typography>
-              </Box>
-            </Box>
-          )} */}
 
           {isAdmin && (
             <Box paddingLeft={isCollapsed ? undefined : '10%'}>

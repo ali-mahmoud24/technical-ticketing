@@ -65,6 +65,12 @@ const TicketForm = () => {
   }, []);
 
   const handleFormSubmit = async (values) => {
+    const engineer = loadedEngineers.find(
+      (engineer) => engineer.id === values.engineerId
+    );
+
+    const engineerFullName = engineer.fullName;
+
     const ticketData = {
       userId,
       engineerId: values.engineerId,
@@ -88,12 +94,13 @@ const TicketForm = () => {
       );
 
       if (response.status === 201) {
+        const { ticketId } = response.data;
         setIsLoading(false);
-        const { engineerName } = response.data;
 
         navigate('/ticket', {
           state: {
-            engineerName,
+            ticketId,
+            engineerFullName,
             administration: ticketData.administration,
             sector: ticketData.sector,
             repairType: ticketData.repairType,
@@ -218,10 +225,6 @@ const TicketForm = () => {
                         {engineer.fullName}
                       </MenuItem>
                     ))}
-
-                  {/* {values.repairType === 'سوفتوير' && softwareOptions}
-                  {values.repairType === 'هاردوير' && hardwareOptions}
-                  {values.repairType === 'شبكات' && networkOptions} */}
                 </Select>
               </FormControl>
             )}

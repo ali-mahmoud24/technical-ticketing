@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { REPAIR_TYPE_LIST } from '../../shared/utils/selectLists';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { useTheme } from '@mui/material';
@@ -21,6 +21,7 @@ import Header from '../Layout/Header';
 
 import { tokens } from '../../theme';
 import LoadingSpinner from '../../shared/components/LoadingSpinner';
+import { formatDate, formatTime } from '../../shared/utils/date';
 
 const AdminRepairsDatagrid = () => {
   const theme = useTheme();
@@ -49,10 +50,6 @@ const AdminRepairsDatagrid = () => {
     getAllTickets();
   }, []);
 
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
-
   const ticketsData = loadedTickets.map((ticket) => ({
     id: ticket._id,
     engineerName: ticket.engineerName,
@@ -72,100 +69,136 @@ const AdminRepairsDatagrid = () => {
     note: ticket.note || 'لا يوجد ملاحظة',
   }));
 
-  const columns = [
-    {
-      field: 'engineerName',
-      headerName: 'اسم المهندس',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      cellClassName: 'name-column--cell',
-    },
-    {
-      field: 'userFullName',
-      headerName: 'اسم المشغل',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-    },
-    {
-      field: 'repairType',
-      headerName: 'نوع العطل',
-      headerAlign: 'center',
-      align: 'center',
-      type: 'singleSelect',
-      valueOptions: REPAIR_TYPE_LIST,
-      sortable: false,
-    },
-    {
-      field: 'startDate',
-      headerName: 'تاريخ البدأ',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-    },
-    {
-      field: 'startTime',
-      headerName: 'وقت البدأ',
-      headerAlign: 'center',
-      align: 'center',
-    },
-    {
-      field: 'closeDate',
-      headerName: 'تاريخ النهاية',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-    },
-    {
-      field: 'closeTime',
-      headerName: 'وقت النهاية',
-      headerAlign: 'center',
-      align: 'center',
-    },
-    {
-      field: 'note',
-      headerName: 'ملاحظة المهندس',
-      headerAlign: 'center',
-      align: 'center',
-      flex: 1,
-      sortable: false,
-    },
-
-    {
-      field: 'status',
-      headerName: 'الحالة',
-      headerAlign: 'center',
-      align: 'center',
-      type: 'singleSelect',
-      valueOptions: ['Uncompleted', 'Accepted', 'Completed'],
-      sortable: false,
-      width: 170,
-      renderCell: ({ row: { status } }) => {
-        return (
-          <Box
-            width="80%"
-            m="0 auto"
-            p="5px"
-            borderRadius="10px"
-            display="flex"
-            justifyContent="center"
-            backgroundColor={
-              status === 'Uncompleted'
-                ? colors.redAccent[400]
-                : status === 'Accepted'
-                ? colors.grey[500]
-                : colors.greenAccent[700]
-            }
-          >
-            <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
-              {status}
-            </Typography>
-          </Box>
-        );
+  const columns = useMemo(
+    () => [
+      {
+        field: 'id',
+        headerName: '#',
+        headerAlign: 'center',
+        align: 'center',
       },
-    },
-  ];
+      {
+        field: 'engineerName',
+        headerName: 'اسم المهندس',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        cellClassName: 'name-column--cell',
+      },
+      {
+        field: 'userFullName',
+        headerName: 'اسم المشغل',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+      },
+      {
+        field: 'repairType',
+        headerName: 'نوع العطل',
+        headerAlign: 'center',
+        align: 'center',
+        type: 'singleSelect',
+        valueOptions: REPAIR_TYPE_LIST,
+        sortable: false,
+      },
+      {
+        field: 'startDate',
+        headerName: 'تاريخ البدأ',
+        headerAlign: 'center',
+        align: 'center',
+        type: 'date',
+        valueGetter: ({ value }) => value && new Date(value),
+        valueFormatter: ({ value }) => formatDate(value),
+        flex: 1,
+      },
+      {
+        field: 'startTime',
+        headerName: 'وقت البدأ',
+        headerAlign: 'center',
+        type: 'dateTime',
+        valueGetter: ({ value }) => value && new Date(value),
+        valueFormatter: ({ value }) => formatTime(value),
+        align: 'center',
+      },
+      {
+        field: 'closeDate',
+        headerName: 'تاريخ النهاية',
+        headerAlign: 'center',
+        align: 'center',
+        type: 'date',
+        valueGetter: ({ value }) => {
+          if (value === '---') {
+            return '---';
+          } else {
+            return value && new Date(value);
+          }
+        },
+        valueFormatter: ({ value }) => formatDate(value),
+        flex: 1,
+      },
+      {
+        field: 'closeTime',
+        headerName: 'وقت النهاية',
+        headerAlign: 'center',
+        type: 'dateTime',
+        valueGetter: ({ value }) => {
+          if (value === '---') {
+            return '---';
+          }
+          return value && new Date(value);
+        },
+        valueFormatter: ({ value }) => formatTime(value),
+        align: 'center',
+      },
+      {
+        field: 'note',
+        headerName: 'ملاحظة المهندس',
+        headerAlign: 'center',
+        align: 'center',
+        flex: 1,
+        sortable: false,
+      },
+
+      {
+        field: 'status',
+        headerName: 'الحالة',
+        headerAlign: 'center',
+        align: 'center',
+        type: 'singleSelect',
+        valueOptions: ['Uncompleted', 'Accepted', 'Completed'],
+        sortable: false,
+        width: 170,
+        renderCell: ({ row: { status } }) => {
+          return (
+            <Box
+              width="80%"
+              m="0 auto"
+              p="5px"
+              borderRadius="10px"
+              display="flex"
+              justifyContent="center"
+              backgroundColor={
+                status === 'Uncompleted'
+                  ? colors.redAccent[400]
+                  : status === 'Accepted'
+                  ? colors.grey[500]
+                  : colors.greenAccent[700]
+              }
+            >
+              <Typography color={colors.grey[100]} sx={{ ml: '5px' }}>
+                {status}
+              </Typography>
+            </Box>
+          );
+        },
+      },
+    ],
+    [colors]
+  );
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <Box m="20px">

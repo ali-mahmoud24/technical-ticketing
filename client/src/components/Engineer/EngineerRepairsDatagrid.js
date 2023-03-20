@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { formatDate, formatTime } from '../../shared/utils/date';
 
 import { useContext, useEffect, useMemo, useState } from 'react';
 
@@ -78,6 +79,12 @@ const EngineerRepairsDatagrid = () => {
   const columns = useMemo(
     () => [
       {
+        field: 'id',
+        headerName: '#',
+        headerAlign: 'center',
+        align: 'center',
+      },
+      {
         field: 'engineerName',
         headerName: 'اسم المهندس',
         headerAlign: 'center',
@@ -104,14 +111,18 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'تاريخ البدأ',
         headerAlign: 'center',
         align: 'center',
+        type: 'date',
+        valueGetter: ({ value }) => value && new Date(value),
+        valueFormatter: ({ value }) => formatDate(value),
         flex: 1,
-        // type: 'date',
-        // valueGetter: ({ value }) => value && new Date(value),
       },
       {
         field: 'startTime',
         headerName: 'وقت البدأ',
         headerAlign: 'center',
+        type: 'dateTime',
+        valueGetter: ({ value }) => value && new Date(value),
+        valueFormatter: ({ value }) => formatTime(value),
         align: 'center',
       },
       {
@@ -119,12 +130,29 @@ const EngineerRepairsDatagrid = () => {
         headerName: 'تاريخ النهاية',
         headerAlign: 'center',
         align: 'center',
+        type: 'date',
+        valueGetter: ({ value }) => {
+          if (value === '---') {
+            return '---';
+          } else {
+            return value && new Date(value);
+          }
+        },
+        valueFormatter: ({ value }) => formatDate(value),
         flex: 1,
       },
       {
         field: 'closeTime',
         headerName: 'وقت النهاية',
         headerAlign: 'center',
+        type: 'dateTime',
+        valueGetter: ({ value }) => {
+          if (value === '---') {
+            return '---';
+          }
+          return value && new Date(value);
+        },
+        valueFormatter: ({ value }) => formatTime(value),
         align: 'center',
       },
       {
