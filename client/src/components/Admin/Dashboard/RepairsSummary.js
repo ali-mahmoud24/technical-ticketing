@@ -5,79 +5,49 @@ import { useState, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
-
 import StatBox from './StatBox';
-import { tokens } from '../../../theme';
 import LoadingSpinner from '../../../shared/components/LoadingSpinner';
+
+import { tokens } from '../../../theme';
 
 const RepairsSummary = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
 
   const [isLoading, setIsLoading] = useState(false);
-  const [repairsNumber, setRepairsNumber] = useState();
-  const [completedRepairsNumbers, setCompletedRepairsNumber] = useState();
-  const [unCompletedRepairsNumbers, setUnCompletedRepairsNumber] = useState();
+  const [ticketsInfo, setTicketsInfo] = useState({
+    totalTicketsNumber: undefined,
+    completedTicketsNumber: undefined,
+    unCompletedTicketsNumber: undefined,
+  });
 
   useEffect(() => {
-    const getNumberOfTickets = async () => {
+    const getTicketsInfo = async () => {
       try {
         setIsLoading(true);
         const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/admin/tickets/number`
+          `${process.env.REACT_APP_BACKEND_URL}/admin/tickets/number-info`
         );
 
         if (response.status === 200) {
-          const { number } = response.data;
-          setRepairsNumber(number);
+          const { ticketsInfo } = response.data;
+          setTicketsInfo(ticketsInfo);
           setIsLoading(false);
         }
       } catch (err) {
         setIsLoading(false);
       }
     };
-    const getNumberOfCompletedTickets = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/admin/tickets/completed`
-        );
-
-        if (response.status === 200) {
-          const { number } = response.data;
-          setCompletedRepairsNumber(number);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        setIsLoading(false);
-      }
-    };
-    const getNumberOfUnCompletedTickets = async () => {
-      try {
-        setIsLoading(true);
-        const response = await axios.get(
-          `${process.env.REACT_APP_BACKEND_URL}/admin/tickets/uncompleted`
-        );
-
-        if (response.status === 200) {
-          const { number } = response.data;
-          setUnCompletedRepairsNumber(number);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        setIsLoading(false);
-      }
-    };
-    getNumberOfTickets();
-    getNumberOfCompletedTickets();
-    getNumberOfUnCompletedTickets();
+    getTicketsInfo();
   }, []);
 
   if (isLoading) {
     return <LoadingSpinner />;
   }
-  const completedProgress = completedRepairsNumbers / repairsNumber;
-  const unCompletedProgress = unCompletedRepairsNumbers / repairsNumber;
+  const completedProgress =
+    ticketsInfo.completedTicketsNumber / ticketsInfo.totalTicketsNumber;
+  const unCompletedProgress =
+    ticketsInfo.unCompletedTicketsNumber / ticketsInfo.totalTicketsNumber;
 
   return (
     <>
@@ -89,7 +59,7 @@ const RepairsSummary = () => {
         justifyContent="center"
       >
         <StatBox
-          title={repairsNumber}
+          title={ticketsInfo.totalTicketsNumber}
           subtitle="عدد الأعطال"
           icon={
             <BuildOutlinedIcon
@@ -107,7 +77,7 @@ const RepairsSummary = () => {
         justifyContent="center"
       >
         <StatBox
-          title={completedRepairsNumbers}
+          title={ticketsInfo.completedTicketsNumber}
           subtitle="عدد الأعطال المكتملة"
           progress={completedProgress}
           ratio={completedProgress}
@@ -126,7 +96,7 @@ const RepairsSummary = () => {
         justifyContent="center"
       >
         <StatBox
-          title={unCompletedRepairsNumbers}
+          title={ticketsInfo.unCompletedTicketsNumber}
           subtitle="عدد الأعطال غير المكتملة"
           progress={unCompletedProgress}
           ratio={unCompletedProgress}

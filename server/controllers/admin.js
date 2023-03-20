@@ -5,7 +5,6 @@ const { HttpError } = require('../models/http-error');
 
 const Ticket = require('../models/ticket');
 const User = require('../models/user');
-const { formatDateAndTime } = require('../utils/date');
 
 exports.addUser = async (req, res, next) => {
   const errors = validationResult(req);
@@ -19,7 +18,6 @@ exports.addUser = async (req, res, next) => {
     secondName,
     userName,
     userCode,
-    userType,
     specialization,
     isAdmin,
     isEngineer,
@@ -168,7 +166,7 @@ exports.getTickets = async (req, res, next) => {
   let loadedTickets;
   try {
     loadedTickets = await Ticket.find({})
-      .sort({ _id: -1 })
+      .sort({ startTime: -1 })
       .populate('engineerId')
       .populate('userId');
   } catch (err) {
@@ -186,21 +184,6 @@ exports.getTickets = async (req, res, next) => {
   res.status(200).json({
     tickets: loadedTickets.map((ticket) => {
       const ticketSeralized = ticket.toObject({ getters: true });
-      // const { formattedDate, formattedTime } = formatDateAndTime(
-      //   ticketSeralized.startTime
-      // );
-
-      // let ticketEndDate;
-      // let ticketEndTime;
-
-      // if (ticketSeralized.closeTime) {
-      //   const { formattedDate, formattedTime } = formatDateAndTime(
-      //     ticketSeralized.closeTime
-      //   );
-
-      //   ticketEndDate = formattedDate;
-      //   ticketEndTime = formattedTime;
-      // }
 
       const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
       const userFullName = `${ticket.userId.firstName} ${ticket.userId.secondName}`;
@@ -209,14 +192,10 @@ exports.getTickets = async (req, res, next) => {
         ...ticketSeralized,
         engineerName,
         userFullName,
-        // startDate: formattedDate,
-        // startTime: formattedTime,
-        // closeDate: ticketEndDate ? ticketEndDate : ticket.closeTime,
-        // closeTime: ticketEndTime ? ticketEndTime : ticket.closeTime,
         startDate: ticket.startTime,
         startTime: ticket.startTime,
-        closeDate: ticket.closeTime? ticket.closeTime : undefined,
-        closeTime: ticket.closeTime? ticket.closeTime : undefined,
+        closeDate: ticket.closeTime ? ticket.closeTime : undefined,
+        closeTime: ticket.closeTime ? ticket.closeTime : undefined,
       };
     }),
   });
@@ -296,7 +275,7 @@ exports.getAdministrationValues = async (req, res, next) => {
   res.status(200).json({ pieData });
 };
 
-exports.bar = async (req, res, next) => {
+exports.getBarChartData = async (req, res, next) => {
   let loadedTickets;
   try {
     loadedTickets = await Ticket.find({}).select('administration repairType');
@@ -337,49 +316,33 @@ exports.bar = async (req, res, next) => {
   res.status(200).json({ barData });
 };
 
-exports.getNumberTickets = async (req, res, next) => {
-  let numberOfTickets;
+exports.getTicketsNumberInfo = async (req, res, next) => {
+  let totalTicketsNumber;
+  let completedTicketsNumber;
+  let unCompletedTicketsNumber;
   try {
-    numberOfTickets = await Ticket.countDocuments();
+    totalTicketsNumber = await Ticket.countDocuments();
+    completedTicketsNumber = await Ticket.countDocuments({
+      status: 'Completed',
+    });
+    unCompletedTicketsNumber = await Ticket.countDocuments({
+      status: 'Uncompleted',
+    });
   } catch (err) {
     const error = new HttpError(
-      'Fetching number of tickets failed, please try again later.',
+      'Fetching number info of tickets failed, please try again later.',
       500
     );
     return next(error);
   }
 
-  res.status(200).json({ number: numberOfTickets });
-};
-
-exports.getCompletedTickets = async (req, res, next) => {
-  let numberOfTickets;
-  try {
-    numberOfTickets = await Ticket.countDocuments({ status: 'Completed' });
-  } catch (err) {
-    const error = new HttpError(
-      'Fetching number of tickets failed, please try again later.',
-      500
-    );
-    return next(error);
-  }
-
-  res.status(200).json({ number: numberOfTickets });
-};
-
-exports.getUncompletedTickets = async (req, res, next) => {
-  let numberOfTickets;
-  try {
-    numberOfTickets = await Ticket.countDocuments({ status: 'Uncompleted' });
-  } catch (err) {
-    const error = new HttpError(
-      'Fetching number of tickets failed, please try again later.',
-      500
-    );
-    return next(error);
-  }
-
-  res.status(200).json({ number: numberOfTickets });
+  res.status(200).json({
+    ticketsInfo: {
+      totalTicketsNumber,
+      completedTicketsNumber,
+      unCompletedTicketsNumber,
+    },
+  });
 };
 
 // exports.deleteAppointment = async (req, res, next) => {

@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
 
-const { validationResult } = require('express-validator');
-
 const { HttpError } = require('../models/http-error');
 
 const Ticket = require('../models/ticket');
-const { formatDateAndTime } = require('../utils/date');
 
 exports.getTickets = async (req, res, next) => {
   const { engineerId } = req.params;
@@ -15,7 +12,7 @@ exports.getTickets = async (req, res, next) => {
     loadedTickets = await Ticket.find({ engineerId: engineerId })
       .populate('engineerId')
       .populate('userId')
-      .sort({ _id: -1 });
+      .sort({ startTime: -1 });
   } catch (err) {
     const error = new HttpError(
       'Fetching tickets failed, please try again later.',
@@ -32,22 +29,6 @@ exports.getTickets = async (req, res, next) => {
     tickets: loadedTickets.map((ticket) => {
       const ticketSeralized = ticket.toObject({ getters: true });
 
-      // const { formattedDate, formattedTime } = formatDateAndTime(
-      //   ticketSeralized.startTime
-      // );
-
-      // let ticketEndDate;
-      // let ticketEndTime;
-
-      // if (ticketSeralized.closeTime) {
-      //   const { formattedDate, formattedTime } = formatDateAndTime(
-      //     ticketSeralized.closeTime
-      //   );
-
-      //   ticketEndDate = formattedDate;
-      //   ticketEndTime = formattedTime;
-      // }
-
       const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
       const userFullName = `${ticket.userId.firstName} ${ticket.userId.secondName}`;
 
@@ -55,10 +36,6 @@ exports.getTickets = async (req, res, next) => {
         ...ticketSeralized,
         engineerName,
         userFullName,
-        // startDate: formattedDate,
-        // startTime: formattedTime,
-        // closeDate: ticketEndDate ? ticketEndDate : ticket.closeTime,
-        // closeTime: ticketEndTime ? ticketEndTime : ticket.closeTime,
         startDate: ticket.startTime,
         startTime: ticket.startTime,
         closeDate: ticket.closeTime ? ticket.closeTime : undefined,

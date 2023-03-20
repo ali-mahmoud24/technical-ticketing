@@ -8,8 +8,6 @@ const router = express.Router();
 
 // router.use(checkAuth);
 
-// router.post('/add-engineer', adminController.addEngineer);
-
 router.post('/add-user', adminController.addUser);
 
 router.get('/users', adminController.getUsers);
@@ -29,21 +27,9 @@ router.get(
   adminController.getAdministrationValues
 );
 
-router.get('/tickets/bar', adminController.bar);
+router.get('/tickets/bar', adminController.getBarChartData);
 
-router.get('/tickets/number', adminController.getNumberTickets);
-
-router.get('/tickets/completed', adminController.getCompletedTickets);
-
-router.get('/tickets/uncompleted', adminController.getUncompletedTickets);
-
-// router.get('/engineers', adminController.getEngineers);
-
-// router.get('/engineers/:engineerId', adminController.getEngineer);
-
-// router.patch('/engineers/:engineerId', adminController.updateEngineer);
-
-// router.delete('/engineers/:engineerId', adminController.deleteEngineer);
+router.get('/tickets/number-info', adminController.getTicketsNumberInfo);
 
 // router.delete(
 //   '/delete-appointment/:appointmentId',
