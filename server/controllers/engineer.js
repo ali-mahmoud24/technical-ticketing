@@ -32,21 +32,21 @@ exports.getTickets = async (req, res, next) => {
     tickets: loadedTickets.map((ticket) => {
       const ticketSeralized = ticket.toObject({ getters: true });
 
-      const { formattedDate, formattedTime } = formatDateAndTime(
-        ticketSeralized.startTime
-      );
+      // const { formattedDate, formattedTime } = formatDateAndTime(
+      //   ticketSeralized.startTime
+      // );
 
-      let ticketEndDate;
-      let ticketEndTime;
+      // let ticketEndDate;
+      // let ticketEndTime;
 
-      if (ticketSeralized.closeTime) {
-        const { formattedDate, formattedTime } = formatDateAndTime(
-          ticketSeralized.closeTime
-        );
-        
-        ticketEndDate = formattedDate;
-        ticketEndTime = formattedTime;
-      }
+      // if (ticketSeralized.closeTime) {
+      //   const { formattedDate, formattedTime } = formatDateAndTime(
+      //     ticketSeralized.closeTime
+      //   );
+
+      //   ticketEndDate = formattedDate;
+      //   ticketEndTime = formattedTime;
+      // }
 
       const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
       const userFullName = `${ticket.userId.firstName} ${ticket.userId.secondName}`;
@@ -55,10 +55,14 @@ exports.getTickets = async (req, res, next) => {
         ...ticketSeralized,
         engineerName,
         userFullName,
-        startDate: formattedDate,
-        startTime: formattedTime,
-        closeDate: ticketEndDate ? ticketEndDate : ticket.closeTime,
-        closeTime: ticketEndTime ? ticketEndTime : ticket.closeTime,
+        // startDate: formattedDate,
+        // startTime: formattedTime,
+        // closeDate: ticketEndDate ? ticketEndDate : ticket.closeTime,
+        // closeTime: ticketEndTime ? ticketEndTime : ticket.closeTime,
+        startDate: ticket.startTime,
+        startTime: ticket.startTime,
+        closeDate: ticket.closeTime ? ticket.closeTime : undefined,
+        closeTime: ticket.closeTime ? ticket.closeTime : undefined,
       };
     }),
   });

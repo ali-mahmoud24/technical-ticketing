@@ -1,8 +1,7 @@
+const ShortUniqueId = require('short-unique-id');
+
 const mongoose = require('mongoose');
-
 const { validationResult } = require('express-validator');
-
-// const dayjs = require('dayjs');
 
 const { HttpError } = require('../models/http-error');
 
@@ -21,7 +20,15 @@ exports.addTicket = async (req, res, next) => {
   const { administration, sector, repairType, startTime, userId, engineerId } =
     req.body;
 
+  const uid = new ShortUniqueId({
+    dictionary: 'hex',
+    length: 5,
+  });
+
+  const _id = uid();
+
   const newTicket = new Ticket({
+    _id,
     userId,
     engineerId,
     administration,
@@ -40,26 +47,9 @@ exports.addTicket = async (req, res, next) => {
     return next(error);
   }
 
-  let loadedEngineer;
-  try {
-    loadedEngineer = await User.findById(engineerId);
-  } catch (err) {
-    const error = new HttpError(
-      'Finding Engineer failed, please try again later.',
-      500
-    );
-    return next(error);
-  }
-
-  if (!loadedEngineer) {
-    const error = new HttpError('No Such Engineer.', 404);
-    return next(error);
-  }
-
   res.status(201).json({
     message: 'Ticket created!',
     ticketId: newTicket._id,
-    engineerName: `${loadedEngineer.firstName} ${loadedEngineer.secondName}`,
   });
 };
 
