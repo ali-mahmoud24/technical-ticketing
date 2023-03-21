@@ -129,9 +129,8 @@ const AdminRepairsDatagrid = () => {
         valueGetter: ({ value }) => {
           if (value === '---') {
             return '---';
-          } else {
-            return value && new Date(value);
           }
+          return value && new Date(value);
         },
         valueFormatter: ({ value }) => formatDate(value),
         flex: 1,
@@ -140,6 +139,7 @@ const AdminRepairsDatagrid = () => {
         field: 'closeTime',
         headerName: 'وقت النهاية',
         headerAlign: 'center',
+        align: 'center',
         type: 'dateTime',
         valueGetter: ({ value }) => {
           if (value === '---') {
@@ -148,7 +148,6 @@ const AdminRepairsDatagrid = () => {
           return value && new Date(value);
         },
         valueFormatter: ({ value }) => formatTime(value),
-        align: 'center',
       },
       {
         field: 'note',

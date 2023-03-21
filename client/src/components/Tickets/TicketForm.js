@@ -152,7 +152,7 @@ const TicketForm = () => {
                 <HomeRepairServiceIcon />
               </Avatar>
               <Typography component="h1" variant="h1">
-                طلب اصلاح
+                طلب إصلاح
               </Typography>
             </Box>
 
@@ -244,7 +244,7 @@ const TicketForm = () => {
                 color="secondary"
                 loading={isLoading}
               >
-                طلب اصلاح
+                طلب إصلاح
               </LoadingButton>
             </Box>
           </form>

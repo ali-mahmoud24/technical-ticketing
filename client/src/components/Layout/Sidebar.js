@@ -32,6 +32,8 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
   useEffect(() => {
     if (match) {
       setSelected(title);
+    } else {
+      setSelected(null);
     }
   }, [match, setSelected, title]);
 
@@ -204,7 +206,7 @@ const Sidebar = () => {
                 الصفحات
               </Typography>
               <Item
-                title="طلب اصلاح"
+                title="طلب إصلاح"
                 to="/ticket-form"
                 icon={<BookOnlineOutlinedIcon />}
                 selected={selected}
