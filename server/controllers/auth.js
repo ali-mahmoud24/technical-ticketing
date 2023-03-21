@@ -20,6 +20,9 @@ exports.login = async (req, res, next) => {
 
   if (!loadedUser) {
     const error = new HttpError('No Such user, could not log you in.', 403);
+    res.status(203).json({
+      message: 'معلومات تسجيل الدخول خاطئة , حاول مرة أخرى',
+    });
     return next(error);
   }
 
@@ -30,6 +33,9 @@ exports.login = async (req, res, next) => {
       'Invalid credentials, could not log you in.',
       401
     );
+    res.status(203).json({
+      message: 'معلومات تسجيل الدخول خاطئة , حاول مرة أخرى',
+    });
     return next(error);
   }
 
@@ -47,7 +53,7 @@ exports.login = async (req, res, next) => {
     return next(error);
   }
 
-  res.json({
+  res.status(200).json({
     token: token,
     userId: loadedUser.id,
     userName: loadedUser.userName,

@@ -45,6 +45,12 @@ const AddUserForm = () => {
         loginData
       );
 
+      if (loginResponse.status === 203) {
+        setIsLoading(false);
+        const { message } = loginResponse.data;
+        alert(message);
+      }
+
       if (loginResponse.status === 200) {
         setIsLoading(false);
         const loginData = loginResponse.data;
