@@ -25,7 +25,7 @@ const AddUserForm = () => {
 
   const [isLoading, setIsLoading] = useState(false);
 
-  const isNonMobile = useMediaQuery('(min-width:992px)');
+  const isNonMobile = useMediaQuery('(min-width:900px)');
   const { login } = useContext(AuthContext);
 
   const theme = useTheme();
@@ -81,6 +81,14 @@ const AddUserForm = () => {
       sx={{
         width: isNonMobile ? '40vw' : '90vw',
         margin: '0 auto',
+        marginTop: '8rem',
+        padding: '40px 20px',
+        paddingBottom: '15px',
+        backgroundColor: colors.grey[400],
+        color: colors.grey[800],
+        borderRadius: '15px',
+        boxShadow: '0 5px 15px rgba(0, 0, 0, 0.1)',
+        // boxShadow: '0 5px 15px rgba(0, 0, 0, 0.2)',
       }}
     >
       <Formik
@@ -99,8 +107,8 @@ const AddUserForm = () => {
           <form onSubmit={handleSubmit}>
             <Box
               sx={{
-                marginTop: 8,
-                marginBottom: 2,
+                // marginTop: 8,
+                marginBottom: 1,
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'center',
@@ -113,7 +121,15 @@ const AddUserForm = () => {
                 تسجيل الدخول
               </Typography>
             </Box>
+
             <TextField
+              sx={{
+                label: { color: colors.grey[800] },
+                input: {
+                  color: colors.grey[800],
+                  // borderBottom: `1px solid ${colors.grey[800]}`,
+                },
+              }}
               fullWidth
               required
               margin="normal"
@@ -128,6 +144,13 @@ const AddUserForm = () => {
               helperText={touched.userName && errors.userName}
             />
             <TextField
+              sx={{
+                label: { color: colors.grey[800] },
+                input: {
+                  color: colors.grey[800],
+                  // borderBottom: `1px solid ${colors.grey[800]}`,
+                },
+              }}
               fullWidth
               required
               margin="normal"
@@ -144,11 +167,11 @@ const AddUserForm = () => {
             <Box mt="10px">
               <LoadingButton
                 sx={{
-                  color: colors.grey[900],
+                  color: colors.grey[800],
                   bgcolor: colors.greenAccent[500],
                   fontSize: '1rem',
                   '&:hover': {
-                    color: colors.grey[100],
+                    color: colors.grey[200],
                   },
                 }}
                 fullWidth

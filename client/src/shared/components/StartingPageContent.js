@@ -1,14 +1,10 @@
 import { useContext } from 'react';
 
-import '../../index.css';
-
-import { Box, Button, useTheme } from '@mui/material';
 import { Link } from 'react-router-dom';
 
-import homepageImg from '../../assets/images/homepage.jpg';
+import { Box, Button, useTheme } from '@mui/material';
 
-// import homepageImg from '../../assets/images/kirill-sh-eVWWr6nmDf8-unsplash.jpg';
-// import homepageImg from '../../assets/images/pexels-manuel-geissinger-325229.jpg';
+import homepageImg from '../../assets/images/homepage.webp';
 
 import { tokens } from '../../theme';
 import { AuthContext } from '../context/auth-context';
