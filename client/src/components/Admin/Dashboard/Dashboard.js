@@ -1,6 +1,12 @@
 import { useRef } from 'react';
 
-import { Box, Button, Typography, useTheme } from '@mui/material';
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 
 import DownloadOutlinedIcon from '@mui/icons-material/DownloadOutlined';
 
@@ -17,6 +23,8 @@ import { tokens } from '../../../theme';
 const Dashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const isNonMobile = useMediaQuery('(min-width:800px)');
 
   const componentRef = useRef();
   const handlePrint = useReactToPrint({
@@ -63,7 +71,7 @@ const Dashboard = () => {
           </Button>
         </Box>
       </Box>
-      
+
       {/* GRID & CHARTS */}
 
       <Box
@@ -79,7 +87,8 @@ const Dashboard = () => {
         <RepairsSummary />
         {/* ROW 2 */}
         <Box
-          gridColumn="span 3"
+          gridColumn={isNonMobile ? 'span 3' : 'span 6'}
+          // gridColumn="span 3"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           p="30px"
@@ -92,7 +101,8 @@ const Dashboard = () => {
           </Box>
         </Box>
         <Box
-          gridColumn="span 3"
+          gridColumn={isNonMobile ? 'span 3' : 'span 6'}
+          // gridColumn="span 3"
           gridRow="span 3"
           backgroundColor={colors.primary[400]}
           padding={'20px'}

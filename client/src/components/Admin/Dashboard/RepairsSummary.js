@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import { useState, useEffect } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, useMediaQuery, useTheme } from '@mui/material';
 
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import StatBox from './StatBox';
@@ -13,6 +13,8 @@ import { tokens } from '../../../theme';
 const RepairsSummary = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+
+  const isNonMobile = useMediaQuery('(min-width:800px)');
 
   const [isLoading, setIsLoading] = useState(false);
   const [ticketsInfo, setTicketsInfo] = useState({
@@ -52,7 +54,8 @@ const RepairsSummary = () => {
   return (
     <>
       <Box
-        gridColumn="span 2"
+        gridColumn={isNonMobile ? 'span 2' : 'span 6'}
+        // gridColumn="span 2"
         backgroundColor={colors.primary[400]}
         display="flex"
         alignItems="center"
@@ -70,7 +73,8 @@ const RepairsSummary = () => {
       </Box>
 
       <Box
-        gridColumn="span 2"
+        gridColumn={isNonMobile ? 'span 2' : 'span 6'}
+        // gridColumn="span 2"
         backgroundColor={colors.primary[400]}
         display="flex"
         alignItems="center"
@@ -89,7 +93,8 @@ const RepairsSummary = () => {
         />
       </Box>
       <Box
-        gridColumn="span 2"
+        gridColumn={isNonMobile ? 'span 2' : 'span 6'}
+        // gridColumn="span 2"
         backgroundColor={colors.primary[400]}
         display="flex"
         alignItems="center"
