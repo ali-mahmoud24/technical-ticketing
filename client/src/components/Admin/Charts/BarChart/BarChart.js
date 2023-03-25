@@ -7,7 +7,7 @@ import TicketGroupBarChart from './TicketGroupBarChart';
 const BarChart = () => {
   return (
     <Box m="20px">
-      <Box sx={{ height: '75vh', maxWidth: '85vw', margin: '0 auto' }}>
+      <Box sx={{ height: '74vh', maxWidth: '85vw', margin: '0 auto' }}>
         <Header title="الأعطال في الإدارات" subtitle="Bar Chart" />
         <TicketGroupBarChart />
       </Box>

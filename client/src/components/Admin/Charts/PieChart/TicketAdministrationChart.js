@@ -44,6 +44,7 @@ const TicketAdministrationChart = () => {
   return (
     <ResponsivePie
       data={pieData}
+      colors={{ scheme: 'accent' }}
       theme={{
         axis: {
           domain: {
@@ -69,13 +70,13 @@ const TicketAdministrationChart = () => {
         legends: {
           text: {
             fill: colors.grey[100],
-            translate: '-5px 20px',
-            fontSize: '0.75rem',
+            translate: '-45px 0px',
+            // translate: '-5px 20px',
+            fontSize: '1rem',
           },
         },
         tooltip: {
           container: {
-            // background: colors.grey[500],
             color: colors.grey[500],
             fontSize: 16,
           },
@@ -126,24 +127,25 @@ const TicketAdministrationChart = () => {
       ]}
       legends={[
         {
-          anchor: 'bottom',
-          direction: 'row',
+          anchor: 'right',
+          direction: 'column',
           // justify: true,
-          translateX: 0,
-          translateY: 56,
-          itemsSpacing: 60,
-          itemWidth: 30,
-          itemHeight: 18,
+          // translateX: 0,
+          // translateY: 56,
+          // itemsSpacing: 2,
+          itemWidth: 90,
+          itemHeight: 30,
           itemTextColor: colors.grey[100],
-          itemDirection: 'right-to-left',
-          itemOpacity: 1,
-          symbolSize: 18,
-          symbolShape: 'circle',
+          // itemDirection: 'right-to-left',
+          symbolSize: 30,
+          itemOpacity: 0.85,
+
+          // symbolShape: 'circle',
           effects: [
             {
               on: 'hover',
               style: {
-                itemTextColor: colors.grey[500],
+                itemOpacity: 1,
               },
             },
           ],

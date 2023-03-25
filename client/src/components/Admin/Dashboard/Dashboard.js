@@ -114,7 +114,7 @@ const Dashboard = () => {
           >
             الأعطال
           </Typography>
-          <Box height="370px">
+          <Box height="370px" width={'600px'} margin="0 auto">
             <TicketGroupBarChart isDashboard={true} />
           </Box>
         </Box>

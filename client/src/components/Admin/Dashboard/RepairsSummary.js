@@ -6,7 +6,6 @@ import { Box, useMediaQuery, useTheme } from '@mui/material';
 
 import BuildOutlinedIcon from '@mui/icons-material/BuildOutlined';
 import StatBox from './StatBox';
-import LoadingSpinner from '../../../shared/components/LoadingSpinner';
 
 import { tokens } from '../../../theme';
 
@@ -44,7 +43,7 @@ const RepairsSummary = () => {
   }, []);
 
   if (isLoading) {
-    return <LoadingSpinner />;
+    return;
   }
   const completedProgress =
     ticketsInfo.completedTicketsNumber / ticketsInfo.totalTicketsNumber;

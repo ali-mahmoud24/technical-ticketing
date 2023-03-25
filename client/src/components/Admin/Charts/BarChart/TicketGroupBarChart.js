@@ -38,12 +38,16 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
   }, []);
 
   if (isLoading) {
-    return <LoadingSpinner size={isDashboard ? '4.5rem' : undefined} />;
+    if (isDashboard) {
+      return;
+    }
+    return <LoadingSpinner />;
   }
 
   return (
     <ResponsiveBar
       data={barData}
+      colors={{ scheme: 'accent' }}
       theme={{
         axis: {
           domain: {
@@ -69,8 +73,8 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
         legends: {
           text: {
             fill: colors.grey[100],
-            translate: '-65px 0px',
-            // fontSize: '0.75rem',
+            translate: isDashboard ? '-35px 0px' : '-55px 0px',
+            fontSize: isDashboard ? undefined : '0.75rem',
           },
         },
         tooltip: {
@@ -87,7 +91,6 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
       padding={0.5}
       valueScale={{ type: 'linear' }}
       indexScale={{ type: 'band', round: true }}
-      colors={{ scheme: 'nivo' }}
       defs={[
         {
           id: 'dots',
@@ -118,15 +121,15 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 0,
-        legend: isDashboard ? undefined : 'نوع العطل', // changed
+        legend: isDashboard ? undefined : 'نوع العطل',
         legendPosition: 'middle',
         legendOffset: 40,
       }}
       axisLeft={{
         tickSize: 5,
-        tickPadding: 5,
+        tickPadding: 20,
         tickRotation: 0,
-        legend: isDashboard ? undefined : 'الإدارة', // changed
+        legend: isDashboard ? undefined : 'الإدارة',
         legendPosition: 'middle',
         legendOffset: -40,
       }}
@@ -140,17 +143,17 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
       legends={[
         {
           dataFrom: 'keys',
-          anchor: 'bottom-right',
+          anchor: 'right',
           direction: 'column',
           justify: false,
-          translateX: 150,
+          translateX: isDashboard ? 150 : 200,
           translateY: 0,
-          itemsSpacing: 2,
-          itemWidth: 100,
-          itemHeight: 40,
-          itemDirection: 'right-to-left',
+          // itemsSpacing: 2,
+          itemWidth: isDashboard ? 50 : 100,
+          itemHeight: isDashboard ? 20 : 40,
+          // itemDirection: 'right-to-left',
           itemOpacity: 0.85,
-          symbolSize: 40,
+          symbolSize: isDashboard ? 20 : 40,
           effects: [
             {
               on: 'hover',

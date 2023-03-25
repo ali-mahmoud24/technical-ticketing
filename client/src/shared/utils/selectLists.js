@@ -11,10 +11,18 @@ export const repairTypeOptions = REPAIR_TYPE_LIST.map((option, index) => (
 ));
 
 export const ADMINSTRATIONS_LIST = [
-  'تشغيل و صيانة',
-  'صرف صناعي',
+  'التشغيل و صيانة',
+  'الصرف الصناعي',
   'المالي',
   'التجاري',
+  'إدارة gis',
+  'مكتب رئيس مجلس الإدارة',
+  'المكتب الفني',
+  'المخطط العام',
+  'التخطيط',
+  'الحسابات',
+  'المراجعة',
+  'المشروعات',
 ];
 
 export const adminstrationsOptions = ADMINSTRATIONS_LIST.map(
