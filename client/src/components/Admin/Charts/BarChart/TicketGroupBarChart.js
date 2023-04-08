@@ -146,7 +146,7 @@ const TicketGroupBarChart = ({ isDashboard = false }) => {
           anchor: 'right',
           direction: 'column',
           justify: false,
-          translateX: isDashboard ? 150 : 200,
+          translateX: isDashboard ? 170 : 215,
           translateY: 0,
           // itemsSpacing: 2,
           itemWidth: isDashboard ? 50 : 100,

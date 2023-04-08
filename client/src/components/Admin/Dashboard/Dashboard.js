@@ -114,7 +114,11 @@ const Dashboard = () => {
           >
             الأعطال
           </Typography>
-          <Box height="370px" width={'600px'} margin="0 auto">
+          <Box
+            height="370px"
+            maxWidth={isNonMobile ? '600px' : undefined}
+            margin="0 auto"
+          >
             <TicketGroupBarChart isDashboard={true} />
           </Box>
         </Box>
