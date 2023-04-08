@@ -91,9 +91,9 @@ const TicketAdministrationChart = () => {
         from: 'color',
         modifiers: [['darker', 0.2]],
       }}
-      arcLinkLabelsTextOffset={60}
-      arcLinkLabelsStraightLength={40}
-      arcLinkLabelsSkipAngle={10}
+      arcLinkLabelsTextOffset={70}
+      arcLinkLabelsStraightLength={60}
+      arcLinkLabelsSkipAngle={7}
       arcLinkLabelsTextColor={colors.grey[100]}
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: 'color' }}

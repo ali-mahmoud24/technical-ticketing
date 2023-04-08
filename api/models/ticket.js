@@ -38,9 +38,17 @@ const ticketSchema = new Schema({
     ref: 'User',
     required: true,
   },
+  engineerFullName: {
+    type: String,
+    required: true,
+  },
   userId: {
     type: Schema.Types.ObjectId,
     ref: 'User',
+    required: true,
+  },
+  userFullName: {
+    type: String,
     required: true,
   },
 });

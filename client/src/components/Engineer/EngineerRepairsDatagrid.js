@@ -59,7 +59,7 @@ const EngineerRepairsDatagrid = () => {
 
   const ticketsData = loadedTickets.map((ticket) => ({
     id: ticket._id,
-    engineerName: ticket.engineerName,
+    engineerName: ticket.engineerFullName,
     userFullName: ticket.userFullName,
     repairType: ticket.repairType,
     startDate: ticket.startDate,

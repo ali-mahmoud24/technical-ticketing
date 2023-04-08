@@ -93,6 +93,12 @@ const TicketForm = () => {
         ticketData
       );
 
+      if (response.status === 202) {
+        const { message } = response.data;
+        alert(message);
+        setIsLoading(false);
+      }
+
       if (response.status === 201) {
         const { ticketId } = response.data;
         setIsLoading(false);

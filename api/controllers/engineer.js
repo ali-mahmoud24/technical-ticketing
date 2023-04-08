@@ -29,13 +29,11 @@ exports.getTickets = async (req, res, next) => {
     tickets: loadedTickets.map((ticket) => {
       const ticketSeralized = ticket.toObject({ getters: true });
 
-      const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
-      const userFullName = `${ticket.userId.firstName} ${ticket.userId.secondName}`;
+      // const engineerName = `${ticket.engineerId.firstName} ${ticket.engineerId.secondName}`;
+      // const userFullName = `${ticket.userId.firstName} ${ticket.userId.secondName}`;
 
       return {
         ...ticketSeralized,
-        engineerName,
-        userFullName,
         startDate: ticket.startTime,
         startTime: ticket.startTime,
         closeDate: ticket.closeTime ? ticket.closeTime : undefined,
