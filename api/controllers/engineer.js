@@ -10,8 +10,8 @@ exports.getTickets = async (req, res, next) => {
   let loadedTickets;
   try {
     loadedTickets = await Ticket.find({ engineerId: engineerId })
-      .populate('engineerId')
-      .populate('userId')
+      // .populate('engineerId')
+      // .populate('userId')
       .sort({ startTime: -1 });
   } catch (err) {
     const error = new HttpError(

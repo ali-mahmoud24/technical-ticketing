@@ -167,8 +167,8 @@ exports.getTickets = async (req, res, next) => {
   try {
     loadedTickets = await Ticket.find({})
       .sort({ startTime: -1 })
-      .populate('engineerId')
-      .populate('userId');
+      // .populate('engineerId')
+      // .populate('userId');
   } catch (err) {
     const error = new HttpError(
       'Fetching tickets failed, please try again later.',

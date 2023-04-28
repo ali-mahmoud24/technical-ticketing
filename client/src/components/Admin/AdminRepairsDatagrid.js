@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 import { REPAIR_TYPE_LIST } from '../../shared/utils/selectLists';
+import { formatDate, formatTime } from '../../shared/utils/date';
 
 import { useEffect, useState, useMemo } from 'react';
 
@@ -21,7 +22,6 @@ import Header from '../Layout/Header';
 
 import { tokens } from '../../theme';
 import LoadingSpinner from '../../shared/components/LoadingSpinner';
-import { formatDate, formatTime } from '../../shared/utils/date';
 
 const AdminRepairsDatagrid = () => {
   const theme = useTheme();
@@ -238,7 +238,6 @@ const AdminRepairsDatagrid = () => {
         }}
       >
         <DataGrid
-          // localeText={arSD}
           HorizontalAlignment="Stretch"
           HorizontalContentAlignment="Stretch"
           ColumnWidth="*"
@@ -251,26 +250,25 @@ const AdminRepairsDatagrid = () => {
       </Box>
     </Box>
   );
+  
+  function CustomToolbar() {
+    return (
+      <GridToolbarContainer>
+        <GridToolbarColumnsButton />
+        <GridToolbarFilterButton />
+        <GridToolbarExport
+          csvOptions={{
+            fileName: 'تقرير الأعطال',
+            utf8WithBom: true,
+            getRowsToExport: () => loadedTickets.map((ticket) => ticket.id),
+          }}
+        />
+      </GridToolbarContainer>
+    );
+  }
 };
 
 export default AdminRepairsDatagrid;
-
-function CustomToolbar() {
-  return (
-    <GridToolbarContainer>
-      <GridToolbarColumnsButton />
-      <GridToolbarFilterButton />
-      {/* <GridToolbarDensitySelector /> */}
-      <GridToolbarExport
-        csvOptions={{
-          fileName: 'تقرير الأعطال',
-          // delimiter: ';',
-          utf8WithBom: true,
-        }}
-      />
-    </GridToolbarContainer>
-  );
-}
 
 function CustomFooter() {
   return (

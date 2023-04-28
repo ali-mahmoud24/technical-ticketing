@@ -34,7 +34,8 @@ const getTicketNames = async (userId, engineerId) => {
 };
 
 const isEngineerBusy = async (engineerId) => {
-  const today = new Date().toLocaleDateString();
+  const options = { timeZone: 'Egypt' };
+  const today = new Date().toLocaleDateString(options);
 
   let loadedTickets;
   try {
@@ -52,18 +53,18 @@ const isEngineerBusy = async (engineerId) => {
 
   let count = 0;
   loadedTickets.forEach((ticket) => {
-    if (ticket.startTime.toLocaleDateString() === today) {
+    if (ticket.startTime.toLocaleDateString(options) === today) {
       count++;
     }
   });
 
   let isBusy = false;
-  console.log(count);
+  // console.log(count);
   if (count >= 3) {
     isBusy = true;
   }
 
-  console.log(isBusy);
+  // console.log(isBusy);
 
   return isBusy;
 };
